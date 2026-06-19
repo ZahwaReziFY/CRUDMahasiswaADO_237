@@ -64,7 +64,7 @@ namespace CRUDMahasiswaADO
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            cmbJK.DataSource = new String[] {"L", "P" };
+            cmbJK.DataSource = new String[] { "L", "P" };
 
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = false;
@@ -94,7 +94,10 @@ namespace CRUDMahasiswaADO
                     Console.WriteLine("Name: " + col.Name + " | DataPropertyName: " + col.DataPropertyName);
                 }
                 dataGridView1.Enabled = true;
-                button.Enabled = false;
+
+                // --- HANYA MENGUBAH BARIS INI MENJADI TRUE AGAR TOMBOL EXCEL MENYALA ---
+                button.Enabled = true;
+
                 btnInsert.Enabled = true;
                 btnUpdate.Enabled = true;
                 btnDelete.Enabled = true;

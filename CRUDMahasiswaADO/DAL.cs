@@ -5,19 +5,26 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Configuration;
 
 namespace CRUDMahasiswaADO
 {
     internal class DAL
     {
-        static string connectionString = "Data Source=WAWAAA\\ZAHWA;Initial Catalog=DBAkademikADO;User ID=sa;Password=Zahwarzfy04";
-
         public string GetConnectionString()
         {
+            // MENGUBAH BAGIAN INI: Mengambil connection string secara dinamis dari App.config
+            string connectionString = ConfigurationManager.ConnectionStrings["CRUDMahasiswaADO.Properties.Settings.DBAkademikADOConnectionString"].ConnectionString;
             return connectionString;
         }
 
-        SqlConnection conn = new SqlConnection(connectionString);
+        public DAL()
+        {
+            conn = new SqlConnection(GetConnectionString());
+        }
+
+        SqlConnection conn;
         SqlDataAdapter da;
         DataTable dtMahasiswa;
         DataTable dtProdi;
@@ -84,6 +91,28 @@ namespace CRUDMahasiswaADO
             }
         }
 
+        public static string GetLocalIPAddress()
+        {
+            string localIP = string.Empty;
+            try
+            {
+                var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        localIP = ip.ToString();
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error getting local IP address: " + ex.Message);
+            }
+            return localIP;
+        }
+
         public void UpdateMhs(string nim, string nama, string alamat, string jeniskelamin, DateTime tanggallahir, string kodeProdi, byte[] foto)
         {
             if (conn.State == ConnectionState.Closed)
@@ -104,7 +133,6 @@ namespace CRUDMahasiswaADO
             command.CommandType = CommandType.StoredProcedure;
 
             command.ExecuteNonQuery();
-
         }
 
         public void DeleteMhs(string nim)
@@ -173,7 +201,6 @@ namespace CRUDMahasiswaADO
             cmd.Parameters.AddWithValue("psn", message);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.ExecuteNonQuery();
-
         }
 
         public DataTable getProdi()
