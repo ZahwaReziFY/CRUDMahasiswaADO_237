@@ -252,6 +252,15 @@ namespace CRUDMahasiswaADO
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(txtNIM.Text))
+                {
+                    MessageBox.Show("Pilih data mahasiswa terlebih dahulu!",
+                                    "Peringatan",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning);
+                    return;
+                }
+                string nimToDelete = txtNIM.Text.Trim();
                 DialogResult dg = MessageBox.Show(
                     "Yakin ingin menghapus data?",
                     "Konfirmasi",
@@ -259,7 +268,12 @@ namespace CRUDMahasiswaADO
                     MessageBoxIcon.Question);
                 if (dg == DialogResult.Yes)
                 {
-                    dbLogic.DeleteMhs(txtNIM.Text);
+                    if (fotoMhs.Image != null)
+                    {
+                        fotoMhs.Image.Dispose();
+                        fotoMhs.Image = null;
+                    }
+                    dbLogic.DeleteMhs(nimToDelete);
                     MessageBox.Show("Data mahasiswa berhasil dihapus");
                     ClearForm();
                     btnLoad.PerformClick();
